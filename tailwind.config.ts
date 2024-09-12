@@ -17,7 +17,15 @@ const config: Config = {
         xl: "1270px",
       },
     },
-    extend: {},
+    extend: {
+      colors: {
+        color1: "#7C3AED",
+        color2: "#DEE5E5",
+        color3: "#E84855",
+        color4: "#070707",
+        color5: "#262730",
+      },
+    },
   },
   plugins: [],
 };
