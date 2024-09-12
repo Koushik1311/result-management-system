@@ -1,11 +1,12 @@
 import { NavLinksData } from "@/constants/nav-link";
 import Link from "next/link";
+import Logo from "../global/Logo";
 
 export default function NavBar() {
   return (
     <header className="container flex items-center justify-between py-4">
       {/* Logo or brand name */}
-      <div className="text-2xl font-extrabold">RMS</div>
+      <Logo />
 
       {/* Nav links */}
       <ul className="flex items-center justify-center gap-8">
