@@ -4,6 +4,10 @@ export const NavLinksData = [
     uri: "/",
   },
   {
+    name: "Result",
+    uri: "/result",
+  },
+  {
     name: "About us",
     uri: "/about",
   },
