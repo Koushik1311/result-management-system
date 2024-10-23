@@ -1,12 +1,53 @@
 import AuthButton from "@/components/global/AuthButton";
 import Logo from "@/components/global/Logo";
+import { loginUser } from "@/data/auth/authentication";
+import { cookies } from "next/headers";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 export default function Login({
   searchParams,
 }: {
   searchParams: { message: string };
 }) {
+  const cookieStore = cookies();
+  const hasCookie = cookieStore.has("refreshToken");
+
+  if (hasCookie) {
+    return redirect("/dashboard/upload");
+  }
+
+  const logIn = async (formData: FormData) => {
+    "use server";
+
+    // const origin = headers().get("origin");
+    const email = formData.get("email") as string;
+    const password = formData.get("password") as string;
+
+    const data = await loginUser(email, password);
+
+    if (!data) {
+      return redirect("/login?message=Could not login user");
+    }
+
+    const accessToken = data.data.accessToken;
+    const refreshToken = data.data.refreshToken;
+
+    cookies().set({
+      name: "accessToken",
+      value: accessToken,
+      maxAge: 60 * 60 * 24,
+    });
+
+    cookies().set({
+      name: "refreshToken",
+      value: refreshToken,
+      maxAge: 60 * 60 * 24 * 30,
+    });
+
+    return redirect("/dashboard/attendance");
+  };
+
   return (
     <main className="container flex items-center justify-center">
       <Link
@@ -51,7 +92,7 @@ export default function Login({
           />
           <AuthButton
             className="w-full flex items-center justify-center h-9 rounded-[6px] bg-violet-600 hover:bg-violet-500 transition-all duration-150 text-sm font-semibold text-white mt-6"
-            // formAction={logIn}
+            formAction={logIn}
             pendingText="Logging In..."
           >
             Log In
