@@ -7,12 +7,12 @@ export const NavLinksData = [
     name: "Result",
     uri: "/result",
   },
-  {
-    name: "About us",
-    uri: "/about",
-  },
-  {
-    name: "contact us",
-    uri: "/contact",
-  },
+  // {
+  //   name: "About us",
+  //   uri: "/about",
+  // },
+  // {
+  //   name: "contact us",
+  //   uri: "/contact",
+  // },
 ];
