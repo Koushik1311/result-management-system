@@ -1,5 +1,6 @@
 import Dashboard from "@/components/layout/Dashboard";
 import type { Metadata } from "next";
+import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
   title: "Dashboard",
@@ -13,6 +14,7 @@ export default function DashboardLayout({
 }>) {
   return (
     <>
+      <Toaster position="top-right" duration={2000} />
       <Dashboard />
       {children}
     </>
