@@ -34,4 +34,4 @@
 
 ## Note
 
-Please refer to the example_student_data.xlsx file for the structure of the data.
+Please refer to the example directory for the structure of the data.
