@@ -14,7 +14,7 @@ export default function page({
   const hasCookie = cookieStore.has("refreshToken");
 
   if (hasCookie) {
-    return redirect("/dashboard/upload");
+    return redirect("/dashboard/attendance");
   }
 
   const signUp = async (formData: FormData) => {
