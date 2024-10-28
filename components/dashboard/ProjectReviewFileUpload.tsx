@@ -20,7 +20,13 @@ type fileType = {
   updatedAt: string;
 };
 
-export default function ProjectReviewFilesUpload() {
+type ProjectReviewFileUploadProps = {
+  refreshResults: () => void;
+};
+
+export default function ProjectReviewFilesUpload({
+  refreshResults,
+}: ProjectReviewFileUploadProps) {
   const [file, setFile] = useState<File | null>(null);
   const [fileName, setFileName] = useState<string | null>(null);
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -71,7 +77,7 @@ export default function ProjectReviewFilesUpload() {
 
     try {
       const response = await axios.post(
-        `${apiBaseUri}/attendence-files/upload`,
+        `${apiBaseUri}/project-review-files/upload`,
         formData,
         config
       );
@@ -100,9 +106,7 @@ export default function ProjectReviewFilesUpload() {
 
   const extractAndSaveHandle = async (id: string) => {
     setIsLoading(true);
-    const loadingToastId = toast.loading(
-      "Extracting and saving certificates..."
-    );
+    const loadingToastId = toast.loading("Extracting and saving results...");
 
     try {
       const data = await extractAndSaveProjectReviewMarks(id);
@@ -111,9 +115,7 @@ export default function ProjectReviewFilesUpload() {
       } else {
         toast.success("Extraction successful", { id: loadingToastId });
 
-        const response = await fetchAllFiles();
-        const data: fileType[] = response.data;
-        setFiles(data);
+        refreshResults();
       }
     } catch (error) {
       toast.error("An error occurred", { id: loadingToastId });
@@ -123,7 +125,7 @@ export default function ProjectReviewFilesUpload() {
   };
 
   const handleDelete = async (id: string) => {
-    const loadingToastId = toast.loading("Deleating certificate...");
+    const loadingToastId = toast.loading("Deleating result...");
     try {
       const response = await deleteFile(id);
 
@@ -132,12 +134,12 @@ export default function ProjectReviewFilesUpload() {
       }
 
       const updatedFiles = files.filter((file) => file._id !== id);
-      toast.success("Certificate deleted successfully", { id: loadingToastId });
+      toast.success("Result deleted successfully", { id: loadingToastId });
       setFiles(updatedFiles);
 
       router.refresh();
     } catch (error) {
-      console.error("Failed to delete certificate:", error);
+      console.error("Failed to delete result:", error);
     }
   };
 

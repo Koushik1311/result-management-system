@@ -20,7 +20,11 @@ type fileType = {
   updatedAt: string;
 };
 
-export default function Files() {
+type AttendenceFileUploadProps = {
+  refreshResults: () => void;
+};
+
+export default function Files({ refreshResults }: AttendenceFileUploadProps) {
   const [file, setFile] = useState<File | null>(null);
   const [fileName, setFileName] = useState<string | null>(null);
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -100,9 +104,7 @@ export default function Files() {
 
   const extractAndSaveHandle = async (id: string) => {
     setIsLoading(true);
-    const loadingToastId = toast.loading(
-      "Extracting and saving certificates..."
-    );
+    const loadingToastId = toast.loading("Extracting and saving results...");
 
     try {
       const data = await extractAndSaveAttendenceMarks(id);
@@ -111,9 +113,7 @@ export default function Files() {
       } else {
         toast.success("Extraction successful", { id: loadingToastId });
 
-        const response = await fetchAllFiles();
-        const data: fileType[] = response.data;
-        setFiles(data);
+        refreshResults();
       }
     } catch (error) {
       toast.error("An error occurred", { id: loadingToastId });
@@ -123,7 +123,7 @@ export default function Files() {
   };
 
   const handleDelete = async (id: string) => {
-    const loadingToastId = toast.loading("Deleating certificate...");
+    const loadingToastId = toast.loading("Deleating result...");
     try {
       const response = await deleteFile(id);
 
@@ -132,12 +132,12 @@ export default function Files() {
       }
 
       const updatedFiles = files.filter((file) => file._id !== id);
-      toast.success("Certificate deleted successfully", { id: loadingToastId });
+      toast.success("Result deleted successfully", { id: loadingToastId });
       setFiles(updatedFiles);
 
       router.refresh();
     } catch (error) {
-      console.error("Failed to delete certificate:", error);
+      console.error("Failed to delete result:", error);
     }
   };
 
